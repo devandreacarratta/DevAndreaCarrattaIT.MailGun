@@ -35,7 +35,7 @@ namespace DevAndreaCarrattaIT.MailGun
 
         [FunctionName("Send")]
         public async Task<string> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
