@@ -45,24 +45,20 @@ namespace DevAndreaCarrattaIT.MailGun
                 throw new System.ArgumentNullException(nameof(requestBody));
             }
 
-            MailGunRequest data = JsonConvert.DeserializeObject< MailGunRequest>(requestBody);
+            MailGunRequest data = JsonConvert.DeserializeObject<MailGunRequest>(requestBody);
 
             if (data == null)
             {
                 throw new System.ArgumentNullException(nameof(data));
             }
 
-            List<string> listOfMailTo = FillMailAddress(data.To as string);
-            List<string> listOfMailCc = FillMailAddress(data.Cc as string);
-            List<string> listOfMailCcn = FillMailAddress(data.Ccn as string);
-
             string mailgunResult = _mailGunEngine.Send(
                 data.Subject,
                 data.Text,
                 data.BodyHtml,
-                listOfMailTo,
-                listOfMailCc,
-                listOfMailCcn);
+                data.To,
+                data.Cc,
+                data.Ccn);
 
             string result = JsonConvert.SerializeObject(new { MailGunEngineResult = mailgunResult });
 
@@ -81,15 +77,5 @@ namespace DevAndreaCarrattaIT.MailGun
             _mailGunEngine.FromName = mailGunConfig.FromName;
         }
 
-        private List<string> FillMailAddress(string mails)
-        {
-            List<string> result = null;
-            if (string.IsNullOrEmpty(mails) == false)
-            {
-                result = mails.Split(Const.CHAR_SEPARATOR).ToList();
-            }
-
-            return result;
-        }
     }
 }

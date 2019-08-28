@@ -11,6 +11,6 @@ namespace DevAndreaCarrattaIT.MailGun.Lib
         bool AddHeaderNativeSend { get; set; }
         string FromMail { get; set; }
         string FromName { get; set; }
-        string Send(string Subject, string Text, string BodyHtml, List<string> To, List<string> Cc = null, List<string> Ccn = null);
+        string Send(string Subject, string Text, string BodyHtml, string To, string Cc = null, string Ccn = null);
     }
 }
