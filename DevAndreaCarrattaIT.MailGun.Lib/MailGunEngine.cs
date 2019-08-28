@@ -21,18 +21,8 @@ namespace DevAndreaCarrattaIT.MailGun.Lib
         {
         }
 
-        public string Send(string Subject, string Text, string BodyHtml, List<string> To, List<string> Cc = null, List<string> Ccn = null)
+        public string Send(string Subject, string Text, string BodyHtml, string To, string Cc = null, string Ccn = null)
         {
-
-            if (Cc == null)
-            {
-                Cc = new List<string>();
-            }
-
-            if (Ccn == null)
-            {
-                Ccn = new List<string>();
-            }
 
             // Nuget : RestSharp 
             RestClient client = new RestClient();
@@ -45,7 +35,6 @@ namespace DevAndreaCarrattaIT.MailGun.Lib
 
             if (AddHeaderNativeSend)
             {
-                request.AddHeader("x-mailgun-native-send", "true");
                 request.AddParameter("x-mailgun-native-send", true);
                 request.AddParameter("o:skip-verification", true);
             }
@@ -57,25 +46,16 @@ namespace DevAndreaCarrattaIT.MailGun.Lib
                 request.AddParameter("expression", this.Expression);
             }
 
-            foreach (var toMail in To)
+            request.AddParameter("to", To);
+
+            if (string.IsNullOrEmpty(Cc) == false)
             {
-                request.AddParameter("to", toMail);
+                request.AddParameter("cc", Cc);
             }
 
-            if (Cc != null)
+            if (string.IsNullOrEmpty(Ccn) == false)
             {
-                foreach (var ccMail in Cc)
-                {
-                    request.AddParameter("cc", ccMail);
-                }
-            }
-
-            if (Ccn != null)
-            {
-                foreach (var ccnMail in Ccn)
-                {
-                    request.AddParameter("ccn", ccnMail);
-                }
+                request.AddParameter("ccn", Ccn);
             }
 
             request.AddParameter("subject", Subject);
